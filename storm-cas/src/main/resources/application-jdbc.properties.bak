@@ -1,0 +1,73 @@
+#####
+#
+#
+cas.authn.jdbc.query[0].sql=SELECT password FROM users WHERE username=?
+cas.authn.jdbc.query[0].fieldPassword=password
+cas.authn.jdbc.query[0].healthQuery=SELECT 1
+cas.authn.jdbc.query[0].isolateInternalQueries=false
+cas.authn.jdbc.query[0].url=jdbc:mysql://106.14.169.0:3306/earth?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=true
+cas.authn.jdbc.query[0].failFast=true
+cas.authn.jdbc.query[0].isolationLevelName=ISOLATION_READ_COMMITTED
+cas.authn.jdbc.query[0].dialect=org.hibernate.dialect.MySQLDialect
+cas.authn.jdbc.query[0].leakThreshold=10
+cas.authn.jdbc.query[0].propagationBehaviorName=PROPAGATION_REQUIRED
+cas.authn.jdbc.query[0].batchSize=1
+cas.authn.jdbc.query[0].user=root
+cas.authn.jdbc.query[0].ddlAuto=validate
+cas.authn.jdbc.query[0].maxAgeDays=180
+cas.authn.jdbc.query[0].password={cipher}AQAlEfhlQJIuBwYikUVmjc25tw4OgWpLUg85p8AP9iqfX9mD6s7IhLsT5puntPcWkNlfbvQMdl5uinLskk+/KeOLBzF8Lq8kLTMO77YcMe2xYVjR4tPfs0/DSmDl4azishpDm44clojm2Txjdf9pJ7FTw7gI1ILBM14bdu0hr2BmijXuevnHesCD/aRMZCxsLBm8328f7GC+5trJE90uqmjA6nz0bUtFDSogHDHWBoqMqZQktQ5tYl07xiDEE/o9f9qJqnguTCCRWxpwgaIHz27b1wbveKier3CIoK8/2jVMjcCK1AtC9q/onII5Nf5Nktvd2/RM7pTKMIZ4AADSFwtGpUf012nYo5XDNrpMYZR9hKjJF3S0XNTOY/OMuyqG84Q=
+cas.authn.jdbc.query[0].autocommit=false
+cas.authn.jdbc.query[0].driverClass=com.mysql.jdbc.Driver
+cas.authn.jdbc.query[0].idleTimeout=5000
+# cas.authn.jdbc.query[0].credentialCriteria=
+
+# NONE|DEFAULT|STANDARD|BCRYPT
+cas.authn.jdbc.query[0].passwordEncoder.type=DEFAULT
+cas.authn.jdbc.query[0].passwordEncoder.characterEncoding=utf8
+cas.authn.jdbc.query[0].passwordEncoder.encodingAlgorithm=MD5
+#cas.authn.jdbc.query[0].passwordEncoder.secret=
+#cas.authn.jdbc.query[0].passwordEncoder.strength=16
+
+#cas.authn.jdbc.query[0].principalTransformation.suffix=
+#cas.authn.jdbc.query[0].principalTransformation.caseConversion=NONE|UPPERCASE|LOWERCASE
+#cas.authn.jdbc.query[0].principalTransformation.prefix=
+
+
+# Attributes that you wish to resolve for the principal
+cas.authn.attributeRepository.attributes.uid=id
+cas.authn.attributeRepository.attributes.displayName=organization
+cas.authn.attributeRepository.attributes.cn=name
+#cas.authn.attributeRepository.attributes.affiliation=groupMembership
+
+
+#cas.authn.attributeRepository.jdbc.singleRow=true
+#cas.authn.attributeRepository.jdbc.requireAllAttributes=true
+#cas.authn.attributeRepository.jdbc.caseCanonicalization=NONE|LOWER|UPPER
+#cas.authn.attributeRepository.jdbc.queryType=OR|AND
+
+# Used only when there is a mapping of many rows to one user
+#cas.authn.attributeRepository.jdbc.columnMappings.columnAttrName1=columnAttrValue1
+#cas.authn.attributeRepository.jdbc.columnMappings.columnAttrName2=columnAttrValue2
+#cas.authn.attributeRepository.jdbc.columnMappings.columnAttrName3=columnAttrValue3
+
+#cas.authn.attributeRepository.jdbc.sql=SELECT * FROM users WHERE {0}
+#cas.authn.attributeRepository.jdbc.username=name
+#cas.authn.attributeRepository.jdbc.healthQuery=SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
+#cas.authn.attributeRepository.jdbc.isolateInternalQueries=false
+#cas.authn.attributeRepository.jdbc.url=jdbc:mysql://127.0.1:3306/earth?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=true
+#cas.authn.attributeRepository.jdbc.failFast=true
+#cas.authn.attributeRepository.jdbc.isolationLevelName=ISOLATION_READ_COMMITTED
+#cas.authn.attributeRepository.jdbc.dialect=org.hibernate.dialect.MySQLDialect
+#cas.authn.attributeRepository.jdbc.leakThreshold=10
+#cas.authn.attributeRepository.jdbc.propagationBehaviorName=PROPAGATION_REQUIRED
+#cas.authn.attributeRepository.jdbc.batchSize=1
+#cas.authn.attributeRepository.jdbc.user=root
+#cas.authn.attributeRepository.jdbc.ddlAuto=validate
+#cas.authn.attributeRepository.jdbc.password=123456
+#cas.authn.attributeRepository.jdbc.autocommit=false
+#cas.authn.attributeRepository.jdbc.driverClass=com.mysql.jdbc.Driver
+#cas.authn.attributeRepository.jdbc.idleTimeout=5000
+#cas.authn.attributeRepository.jdbc.pool.suspension=false
+#cas.authn.attributeRepository.jdbc.pool.minSize=6
+#cas.authn.attributeRepository.jdbc.pool.maxSize=18
+#cas.authn.attributeRepository.jdbc.pool.maxWait=2000
