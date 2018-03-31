@@ -1,12 +1,14 @@
 package justlive.earth.breeze.storm.cas.client.shiro.web;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.Filter;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.mgt.SubjectFactory;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.WebSecurityManager;
@@ -18,9 +20,8 @@ import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.logout.CasLogoutHandler;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.J2EContext;
-import org.pac4j.core.context.WebContext;
+import org.pac4j.core.context.session.J2ESessionStore;
 import org.pac4j.core.context.session.SessionStore;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.buji.pac4j.filter.CallbackFilter;
@@ -29,9 +30,9 @@ import io.buji.pac4j.filter.SecurityFilter;
 import io.buji.pac4j.realm.Pac4jRealm;
 import io.buji.pac4j.subject.Pac4jSubjectFactory;
 import justlive.earth.breeze.snow.common.base.constant.BaseConstants;
+import justlive.earth.breeze.snow.common.base.util.HttpUtils;
 import justlive.earth.breeze.snow.common.web.base.ConfigProperties;
 import justlive.earth.breeze.storm.cas.client.shiro.handle.ShiroCasLogoutHandler;
-import justlive.earth.breeze.storm.cas.client.shiro.util.MyShiroSessionStore;
 
 /**
  * pac4j配置
@@ -42,8 +43,9 @@ import justlive.earth.breeze.storm.cas.client.shiro.util.MyShiroSessionStore;
 @Configuration
 public class Pac4jConfig {
 
-  @Autowired
-  ConfigProperties configProps;
+  static {
+    HttpUtils.trustAllManager();
+  }
 
   /**
    * 登出处理
@@ -51,8 +53,8 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  CasLogoutHandler<WebContext> logoutHandler() {
-    ShiroCasLogoutHandler<WebContext> logoutHandler = new ShiroCasLogoutHandler<>();
+  CasLogoutHandler<J2EContext> logoutHandler() {
+    ShiroCasLogoutHandler<J2EContext> logoutHandler = new ShiroCasLogoutHandler<>();
     logoutHandler.setDestroySession(true);
     return logoutHandler;
   }
@@ -63,10 +65,11 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  CasConfiguration casConfig(CasLogoutHandler<WebContext> logoutHandler) {
+  CasConfiguration casConfig(CasLogoutHandler<J2EContext> logoutHandler,
+      ConfigProperties configProps) {
 
     CasConfiguration casConfig = new CasConfiguration();
-    casConfig.setLoginUrl(configProps.logoutUrl);
+    casConfig.setLoginUrl(configProps.casLoginUrl);
     casConfig.setPrefixUrl(configProps.casServerPrefixUrl);
     casConfig.setLogoutHandler(logoutHandler);
 
@@ -80,10 +83,9 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  CasClient casClient(CasConfiguration casConfig) {
+  CasClient casClient(CasConfiguration casConfig, ConfigProperties configProps) {
     CasClient client = new CasClient(casConfig);
-    client.setCallbackUrl(configProps.proxyReceptorUrl + configProps.appName);
-    client.setName(configProps.appName);
+    client.setCallbackUrl(configProps.casService);
     return client;
   }
 
@@ -94,7 +96,7 @@ public class Pac4jConfig {
    */
   @Bean
   SessionStore<J2EContext> sessionStore() {
-    return new MyShiroSessionStore();
+    return new J2ESessionStore();
   }
 
   /**
@@ -116,6 +118,7 @@ public class Pac4jConfig {
    * 
    * @return
    */
+  @Bean
   Cookie sessionIdCookie() {
     SimpleCookie cookie = new SimpleCookie(SimpleCookie.class.getName());
     cookie.setHttpOnly(false);
@@ -212,7 +215,7 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  CallbackFilter callbackFilter(Config config) {
+  CallbackFilter callbackFilter(Config config, ConfigProperties configProps) {
     CallbackFilter filter = new CallbackFilter();
     filter.setConfig(config);
     filter.setDefaultUrl(configProps.defaultSuccessUrl);
@@ -226,7 +229,7 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  LogoutFilter logoutFilter(Config config) {
+  LogoutFilter logoutFilter(Config config, ConfigProperties configProps) {
     LogoutFilter filter = new LogoutFilter();
     filter.setConfig(config);
     filter.setDefaultUrl(configProps.logoutUrl);
@@ -235,23 +238,19 @@ public class Pac4jConfig {
     return filter;
   }
 
-  @Bean
-  ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+  @Bean("shiroFilter")
+  ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager,
+      SecurityFilter securityFilter, CallbackFilter callbackFilter, LogoutFilter logoutFilter,
+      ConfigProperties configProps) {
     ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
     bean.setSecurityManager(securityManager);
-    // TODO
-    // bean.setFilters(filters);
-    // bean.setFilterChainDefinitions(definitions);
+    Map<String, Filter> filters = new HashMap<>();
+    filters.put("securityFilter", securityFilter);
+    filters.put("callbackFilter", callbackFilter);
+    filters.put("logoutFilter", logoutFilter);
+    bean.setFilters(filters);
+    bean.setFilterChainDefinitions(configProps.filterChainDefinitions);
     return bean;
   }
 
-  /**
-   * 生命周期处理
-   * 
-   * @return
-   */
-  @Bean
-  LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-    return new LifecycleBeanPostProcessor();
-  }
 }
