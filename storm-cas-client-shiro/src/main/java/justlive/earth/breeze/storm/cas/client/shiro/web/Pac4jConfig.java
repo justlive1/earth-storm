@@ -2,6 +2,7 @@ package justlive.earth.breeze.storm.cas.client.shiro.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.Filter;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.mgt.SubjectFactory;
@@ -18,6 +19,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.pac4j.cas.client.CasClient;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.logout.CasLogoutHandler;
+import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.J2EContext;
 import org.pac4j.core.context.session.J2ESessionStore;
@@ -86,6 +88,7 @@ public class Pac4jConfig {
   CasClient casClient(CasConfiguration casConfig, ConfigProperties configProps) {
     CasClient client = new CasClient(casConfig);
     client.setCallbackUrl(configProps.casService);
+    client.setName(CasClient.class.getSimpleName());
     return client;
   }
 
@@ -100,6 +103,20 @@ public class Pac4jConfig {
   }
 
   /**
+   * clients
+   * 
+   * @param casClient
+   * @return
+   */
+  @Bean
+  Clients clients(CasClient casClient) {
+    Clients clients = new Clients();
+    // 设置所有支持的client
+    clients.setClients(casClient);
+    return clients;
+  }
+
+  /**
    * pac4j配置
    * 
    * @param casClient
@@ -107,8 +124,9 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  Config authConfig(CasClient casClient, SessionStore<J2EContext> sessionStore) {
-    Config authConfig = new Config(casClient);
+  Config authConfig(Clients clients, SessionStore<J2EContext> sessionStore) {
+    Config authConfig = new Config();
+    authConfig.setClients(clients);
     authConfig.setSessionStore(sessionStore);
     return authConfig;
   }
@@ -202,10 +220,11 @@ public class Pac4jConfig {
    * @return
    */
   @Bean
-  SecurityFilter securityFilter(Config config) {
+  SecurityFilter securityFilter(Config config, Clients clients) {
     SecurityFilter filter = new SecurityFilter();
     filter.setConfig(config);
-    filter.setClients(CasClient.class.getSimpleName());
+    filter.setClients(
+        clients.getClients().stream().map((r) -> r.getName()).collect(Collectors.joining(",")));;
     return filter;
   }
 
