@@ -51,3 +51,5 @@
 [Release](https://gitee.com/justlive1/earth-storm/releases)
 
 storm-cas打包为可执行war
+- storm-cas配置管理默认是使用的[earth-cloud](https://gitee.com/justlive1/earth-cloud)的配置中心
+- 不使用配置中心修改spring.cloud.config.enabled=false，并把application.properties.bak和applica-jdbc.properties.bak去掉.bak后缀
