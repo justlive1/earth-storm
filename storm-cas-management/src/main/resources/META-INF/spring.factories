@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  justlive.earth.breeze.storm.cas.management.CasManagementConfig
+  vip.justlive.storm.cas.management.CasManagementConfig

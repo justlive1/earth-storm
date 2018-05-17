@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>justlive.earth.breeze.storm</groupId>
+	<groupId>vip.justlive</groupId>
 	<artifactId>storm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>storm</name>
@@ -17,15 +17,16 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 
-		<snow-common-web.version>0.0.1-SNAPSHOT</snow-common-web.version>
+		<snow-common-web.version>1.0.0</snow-common-web.version>
 		<cas.version>5.2.0</cas.version>
 		<cas.client.version>3.4.1</cas.client.version>
 		<springboot.version>1.5.8.RELEASE</springboot.version>
 		<buji.version>3.0.0</buji.version>
 		<pac4j.version>2.1.0</pac4j.version>
 
-		<spring.version>5.0.2.RELEASE</spring.version>
-		<spring-security.version>5.0.0.RELEASE</spring-security.version>
+		<spring.version>4.3.12.RELEASE</spring.version>
+		<spring-security.version>4.2.3.RELEASE</spring-security.version>
+
 		<shiro.version>1.4.0</shiro.version>
 		<aspectj.version>1.8.9</aspectj.version>
 		<assertj.version>2.6.0</assertj.version>
@@ -102,13 +103,13 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>justlive.earth.breeze.snow</groupId>
+				<groupId>vip.justlive</groupId>
 				<artifactId>snow-common-base</artifactId>
 				<version>${snow-common-web.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>justlive.earth.breeze.snow</groupId>
+				<groupId>vip.justlive</groupId>
 				<artifactId>snow-common-web</artifactId>
 				<version>${snow-common-web.version}</version>
 			</dependency>
